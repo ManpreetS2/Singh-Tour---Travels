@@ -1,7 +1,7 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
-import { NorthMapSvg } from "@/components/NorthMapSvg";
 import { business, callUrl, whatsappUrl } from "@/lib/business";
 import { config } from "@/lib/config";
 import {
@@ -27,6 +27,8 @@ const MONTHS = [
   "December",
 ] as const;
 
+const PLACE_PLACEHOLDER = "a few places you choose";
+
 type Sheet = "places" | "month" | "note" | null;
 
 export function TripPlanner({
@@ -34,7 +36,6 @@ export function TripPlanner({
 }: {
   seedPlaces?: string[];
 }) {
-  /** Local toggles; seeds from gallery arrive via remount key on the parent. */
   const [placeIds, setPlaceIds] = useState<string[]>(() => seedPlaces);
   const [month, setMonth] = useState<string>("December");
   const [exactDate, setExactDate] = useState("");
@@ -42,25 +43,23 @@ export function TripPlanner({
   const [note, setNote] = useState("");
   const [sheet, setSheet] = useState<Sheet>(null);
 
-  const placeNames = placeIds
-    .map((id) => getPlace(id)?.name)
-    .filter(Boolean) as string[];
+  const selectedPlaces = placeIds
+    .map((id) => getPlace(id))
+    .filter(Boolean) as NonNullable<ReturnType<typeof getPlace>>[];
 
-  const whenLabel = exactDate
-    ? formatDateDdMmYyyy(exactDate)
-    : month;
+  const placeNames = selectedPlaces.map((p) => p.name);
 
-  const sentence = `I'd like to travel from Delhi to ${
-    placeNames.length ? placeNames.join(", ") : "…"
-  }, around ${whenLabel}, with ${people} people.${
+  const whenLabel = exactDate ? formatDateDdMmYyyy(exactDate) : month;
+
+  const destinationPhrase = placeNames.length
+    ? placeNames.join(", ")
+    : PLACE_PLACEHOLDER;
+
+  const sentence = `I'd like to travel from Delhi to ${destinationPhrase}, around ${whenLabel}, with ${people} people.${
     note ? ` Note: ${note}` : ""
   }`;
 
-  const message = [
-    `Enquiry — ${business.name}`,
-    sentence,
-  ].join("\n");
-
+  const message = [`Enquiry — ${business.name}`, sentence].join("\n");
   const wa = config.whatsappEnabled ? whatsappUrl(message) : null;
 
   const placeLabel =
@@ -78,7 +77,7 @@ export function TripPlanner({
         <p className="font-label">Trip planner</p>
         <h2
           id="plan-heading"
-          className="font-display mt-3 text-[30px] leading-tight text-forest md:text-[48px]"
+          className="font-display mt-3 text-[clamp(1.85rem,4vw,3rem)] font-[350] leading-tight text-forest"
         >
           Compose your journey
         </h2>
@@ -87,7 +86,7 @@ export function TripPlanner({
         </p>
 
         <p
-          className="font-display mt-10 text-[22px] leading-relaxed text-charcoal md:text-[28px]"
+          className="font-display mt-10 text-[22px] font-[350] leading-relaxed text-charcoal md:text-[28px]"
           aria-live="polite"
         >
           I&apos;d like to travel{" "}
@@ -97,12 +96,15 @@ export function TripPlanner({
           to{" "}
           <button
             type="button"
-            className="btn-press min-h-11 underline decoration-forest underline-offset-4 text-forest"
+            className={cn(
+              "btn-press min-h-11 underline decoration-forest underline-offset-4",
+              placeNames.length ? "text-forest" : "text-stone italic",
+            )}
             aria-haspopup="dialog"
             aria-label={placeLabel}
             onClick={() => setSheet("places")}
           >
-            {placeNames.length ? placeNames.join(", ") : "choose places ＋"}
+            {placeNames.length ? placeNames.join(", ") : PLACE_PLACEHOLDER}
           </button>
           , around{" "}
           <button
@@ -146,44 +148,98 @@ export function TripPlanner({
           </button>
         </p>
 
-        {/* Summary card */}
-        <div className="charbagh-corners mt-12 bg-ivory p-6 md:p-8">
-          <div className="flex flex-col gap-6 sm:flex-row">
-            <div className="min-w-0 flex-1">
-              <p className="font-label">Your enquiry</p>
-              <p className="mt-3 text-[16px] leading-relaxed text-charcoal">
-                {sentence}
-              </p>
-              <p className="mt-4 text-[14px] text-stone">
-                No prices online. We call you back to confirm.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-3">
-                <a
-                  href={callUrl()}
-                  className="btn-press btn-forest inline-flex min-h-12 items-center rounded-sm bg-forest px-6 text-ivory"
+        {/* Selected place chips with thumbnails */}
+        <div className="mt-6 flex flex-wrap gap-2">
+          {selectedPlaces.map((place) => (
+            <button
+              key={place.id}
+              type="button"
+              className="btn-press inline-flex min-h-11 items-center gap-2 rounded-sm bg-forest py-1 pl-1 pr-3 text-ivory"
+              onClick={() =>
+                setPlaceIds((prev) => prev.filter((id) => id !== place.id))
+              }
+              aria-label={`Remove ${place.name}`}
+            >
+              <span className="relative h-9 w-9 overflow-hidden rounded-[2px]">
+                <Image
+                  src={place.image}
+                  alt=""
+                  fill
+                  sizes="36px"
+                  className="object-cover"
+                />
+              </span>
+              <span className="text-[14px]">{place.name}</span>
+              <span aria-hidden className="text-mist">
+                ×
+              </span>
+            </button>
+          ))}
+          <button
+            type="button"
+            className="btn-press inline-flex min-h-11 items-center gap-2 rounded-sm border border-forest/30 px-3 text-forest"
+            onClick={() => setSheet("places")}
+          >
+            <span aria-hidden>＋</span> Add places
+          </button>
+        </div>
+
+        {/* Summary card — no stray map artwork */}
+        <div className="relative mt-12 border border-hairline bg-ivory p-6 md:p-8">
+          {/* Gold charbagh corner marks */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l-[1.5px] border-t-[1.5px] border-gold"
+          />
+          <span
+            aria-hidden
+            className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b-[1.5px] border-r-[1.5px] border-gold"
+          />
+          <p className="font-label">Your enquiry</p>
+          <p className="mt-3 text-[16px] leading-relaxed text-charcoal">
+            {sentence}
+          </p>
+          {selectedPlaces.length > 0 && (
+            <ul className="mt-5 flex flex-wrap gap-3" aria-label="Stops">
+              {selectedPlaces.map((place) => (
+                <li
+                  key={place.id}
+                  className="flex items-center gap-2 text-[14px] text-stone"
                 >
-                  Call to confirm
-                </a>
-                {wa && (
-                  <a
-                    href={wa}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="btn-press inline-flex min-h-12 items-center rounded-sm border border-forest px-6 text-forest"
-                  >
-                    Send on WhatsApp
-                  </a>
-                )}
-              </div>
-            </div>
-            <div className="w-full shrink-0 overflow-hidden rounded-sm sm:w-[140px]">
-              <NorthMapSvg
-                compact
-                staticAll
-                litPlaces={placeIds}
-                className="aspect-[360/220] h-auto max-h-[120px]"
-              />
-            </div>
+                  <span className="relative h-10 w-10 overflow-hidden">
+                    <Image
+                      src={place.image}
+                      alt=""
+                      fill
+                      sizes="40px"
+                      className="object-cover"
+                    />
+                  </span>
+                  {place.name}
+                </li>
+              ))}
+            </ul>
+          )}
+          <p className="mt-4 text-[14px] text-stone">
+            No prices online. We call you back to confirm.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <a
+              href={callUrl()}
+              className="btn-press btn-forest inline-flex min-h-12 items-center rounded-sm bg-forest px-6 text-ivory"
+            >
+              Call to confirm
+            </a>
+            {wa && (
+              <a
+                href={wa}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-press inline-flex min-h-12 items-center rounded-sm border border-forest px-6 text-forest"
+              >
+                Send on WhatsApp
+              </a>
+            )}
           </div>
         </div>
       </div>
@@ -202,7 +258,7 @@ export function TripPlanner({
             <div className="mt-4 flex items-center justify-between">
               <h3
                 id="planner-sheet-title"
-                className="font-display text-[24px] text-forest"
+                className="font-display text-[24px] font-[350] text-forest"
               >
                 {sheet === "places" && "Choose places"}
                 {sheet === "month" && "Choose a month"}
@@ -222,7 +278,7 @@ export function TripPlanner({
                 {regions.map((region) => (
                   <div key={region.id}>
                     <p className="font-label">{region.label}</p>
-                    <ul className="mt-2 space-y-1">
+                    <ul className="mt-2 space-y-2">
                       {plannerPlaces()
                         .filter((p) => p.regionId === region.id)
                         .map((place) => {
@@ -232,7 +288,7 @@ export function TripPlanner({
                               <button
                                 type="button"
                                 className={cn(
-                                  "btn-press flex min-h-12 w-full items-center justify-between rounded-sm px-3 text-left",
+                                  "btn-press flex min-h-14 w-full items-center gap-3 rounded-sm px-2 text-left",
                                   on
                                     ? "bg-forest text-ivory"
                                     : "bg-sand text-charcoal",
@@ -246,8 +302,21 @@ export function TripPlanner({
                                   )
                                 }
                               >
-                                <span>{place.name}</span>
-                                <span aria-hidden>{on ? "✓" : "＋"}</span>
+                                <span className="relative h-12 w-12 shrink-0 overflow-hidden">
+                                  <Image
+                                    src={place.image}
+                                    alt=""
+                                    fill
+                                    sizes="48px"
+                                    className="object-cover"
+                                  />
+                                </span>
+                                <span className="flex-1 text-[16px]">
+                                  {place.name}
+                                </span>
+                                <span aria-hidden className="pr-2">
+                                  {on ? "✓" : "＋"}
+                                </span>
                               </button>
                             </li>
                           );

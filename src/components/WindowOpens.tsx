@@ -53,7 +53,7 @@ export function WindowOpens() {
         }
       >
         <h2 id="window-heading" className="sr-only">
-          Amritsar at night
+          Amber Fort, Jaipur
         </h2>
         <div
           className="relative h-full min-h-[60svh] overflow-hidden"
@@ -64,16 +64,16 @@ export function WindowOpens() {
           }}
         >
           <Image
-            src="/images/v2/hero-golden-temple-night.jpg"
-            alt="Golden Temple, Amritsar, at night"
+            src="/images/v2/jaipur-amber.jpg"
+            alt="Amber Fort, Jaipur, above Maota Lake"
             fill
             sizes="100vw"
-            className="object-cover"
+            className="object-cover object-[50%_40%]"
             priority={false}
           />
           <div className="absolute inset-x-0 bottom-0 bg-[color-mix(in_srgb,var(--forest-deep)_80%,transparent)] px-4 py-4 md:px-8">
             <p className="text-[14px] text-mist md:text-[15px]">
-              Harmandir Sahib, Amritsar · Marsmux · CC BY-SA 4.0
+              Amber Fort, Jaipur · A.Savin · FAL
             </p>
           </div>
         </div>

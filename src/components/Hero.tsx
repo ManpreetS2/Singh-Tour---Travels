@@ -33,13 +33,23 @@ function DelhiClock() {
   );
 }
 
+/**
+ * Golden Temple at night — the most vivid warm cinematic frame in the
+ * Safarnama set (not the hazy Humayun's Tomb).
+ */
+const HERO_IMAGE = {
+  src: "/images/v2/hero-golden-temple-night.jpg",
+  alt: "Harmandir Sahib, Amritsar, glowing at night",
+  credit: "Harmandir Sahib, Amritsar · Marsmux · CC BY-SA 4.0",
+} as const;
+
 export function Hero() {
   const reduced = usePrefersReducedMotion();
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
     if (reduced) return;
-    const id = window.setTimeout(() => setReady(true), 0);
+    const id = window.setTimeout(() => setReady(true), 40);
     return () => window.clearTimeout(id);
   }, [reduced]);
 
@@ -47,15 +57,115 @@ export function Hero() {
 
   return (
     <section
-      className="relative overflow-hidden px-4 pb-16 pt-[calc(var(--header-h)+28px)] md:px-8 md:pb-24 md:pt-[calc(var(--header-h)+48px)] landscape:min-h-0 landscape:pb-10"
+      className="relative overflow-hidden bg-ivory"
       aria-labelledby="hero-heading"
     >
-      <div className="mx-auto grid max-w-6xl gap-8 md:grid-cols-12 md:items-start md:gap-10 [@media(orientation:landscape)_and_(max-height:500px)]:grid-cols-2 [@media(orientation:landscape)_and_(max-height:500px)]:items-center [@media(orientation:landscape)_and_(max-height:500px)]:gap-6">
-        <div className="relative z-10 md:col-span-5">
+      {/* ——— Mobile: ivory type band + edge-to-edge photo, both above the fold ——— */}
+      <div className="pt-[var(--header-h)] md:hidden">
+        <div className="bg-ivory px-4 pb-4 pt-5">
           <div
             className={cn(
               "transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
-              show ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+              show ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+            )}
+          >
+            <DelhiClock />
+          </div>
+          <h1
+            className={cn(
+              "font-display mt-3 max-w-[11ch] text-[clamp(2.35rem,9vw,2.85rem)] font-[350] leading-[1.05] text-forest",
+              "transition-[opacity,transform] duration-700 delay-75 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              show ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+            )}
+          >
+            North India, from Delhi.
+          </h1>
+          <p
+            lang="hi"
+            className={cn(
+              "font-display mt-2 text-[1.15rem] font-[350] text-stone",
+              "transition-[opacity,transform] duration-700 delay-100 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              show ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+            )}
+          >
+            दिल्ली से, आपके हिसाब से।
+          </p>
+          <a
+            href="#plan"
+            className={cn(
+              "btn-press btn-forest mt-4 inline-flex min-h-11 items-center rounded-sm bg-forest px-5 text-[15px] font-medium text-ivory",
+              "transition-[opacity,transform] duration-700 delay-150 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              show ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0",
+            )}
+          >
+            Plan a journey
+          </a>
+          <p className="mt-2 text-[13px] text-stone">
+            No prices online · Concept demo
+          </p>
+        </div>
+
+        {/* True edge-to-edge photo (break out of any parent padding) */}
+        <figure
+          className="relative left-1/2 h-[50svh] min-h-[300px] w-screen max-w-[100vw] -translate-x-1/2"
+        >
+          <div
+            className={cn(
+              "absolute inset-0 overflow-hidden",
+              "transition-[clip-path,transform] duration-[900ms] ease-[cubic-bezier(0.65,0,0.35,1)]",
+              reduced || show
+                ? "scale-100 [clip-path:inset(0)]"
+                : "scale-[1.06] [clip-path:inset(6%_4%)]",
+            )}
+          >
+            <Image
+              src={HERO_IMAGE.src}
+              alt={HERO_IMAGE.alt}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-[50%_38%]"
+            />
+          </div>
+          <figcaption className="absolute inset-x-0 bottom-0 bg-[color-mix(in_srgb,var(--forest-deep)_80%,transparent)] px-4 py-2 text-[12px] text-mist">
+            {HERO_IMAGE.credit}
+          </figcaption>
+        </figure>
+      </div>
+
+      {/* ——— Desktop: ivory panel + near-full-bleed cinematic photo ——— */}
+      <div className="relative hidden min-h-[calc(100svh-var(--header-h))] pt-[var(--header-h)] md:block">
+        {/* Photo plane — bleeds to the right edge of the viewport */}
+        <figure className="absolute inset-y-0 right-0 top-[var(--header-h)] w-[62%] lg:w-[64%]">
+          <div
+            className={cn(
+              "absolute inset-0 overflow-hidden",
+              "transition-[clip-path,transform] duration-[900ms] ease-[cubic-bezier(0.65,0,0.35,1)]",
+              reduced || show
+                ? "scale-100 [clip-path:inset(0)]"
+                : "scale-[1.06] [clip-path:inset(5%_3%)]",
+            )}
+          >
+            <Image
+              src={HERO_IMAGE.src}
+              alt={HERO_IMAGE.alt}
+              fill
+              priority
+              sizes="60vw"
+              className="object-cover object-[48%_35%]"
+            />
+          </div>
+          <figcaption className="absolute bottom-6 left-6 z-10 max-w-md bg-[color-mix(in_srgb,var(--forest-deep)_80%,transparent)] px-3 py-2 text-[13px] text-mist">
+            {HERO_IMAGE.credit}
+          </figcaption>
+        </figure>
+
+        {/* Solid ivory band — type never on the photo */}
+        <div className="relative z-10 flex min-h-[calc(100svh-var(--header-h))] w-[42%] max-w-xl flex-col justify-center bg-ivory px-8 lg:w-[40%] lg:px-12 xl:pl-16">
+          <div
+            className={cn(
+              "transition-[opacity,transform] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              show ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
             )}
           >
             <DelhiClock />
@@ -64,9 +174,9 @@ export function Hero() {
           <h1
             id="hero-heading"
             className={cn(
-              "font-display mt-5 max-w-[14ch] text-[40px] leading-[1.1] text-forest md:text-[72px] md:leading-[1.05]",
-              "transition-[opacity,transform] duration-700 delay-[80ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-              show ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+              "font-display mt-5 max-w-[11ch] text-[clamp(3.25rem,6.5vw,6rem)] font-[350] leading-[1.02] text-forest",
+              "transition-[opacity,transform] duration-700 delay-75 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              show ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
             )}
           >
             North India, from Delhi.
@@ -75,9 +185,9 @@ export function Hero() {
           <p
             lang="hi"
             className={cn(
-              "font-display mt-3 text-[20px] text-stone md:text-[28px]",
-              "transition-[opacity,transform] duration-700 delay-[160ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-              show ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+              "font-display mt-4 text-[clamp(1.35rem,2.2vw,1.85rem)] font-[350] text-stone",
+              "transition-[opacity,transform] duration-700 delay-150 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              show ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
             )}
           >
             दिल्ली से, आपके हिसाब से।
@@ -85,9 +195,9 @@ export function Hero() {
 
           <p
             className={cn(
-              "mt-5 max-w-[36ch] text-[17px] leading-relaxed text-stone",
-              "transition-[opacity,transform] duration-700 delay-[200ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-              show ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+              "mt-5 max-w-[32ch] text-[17px] leading-relaxed text-stone",
+              "transition-[opacity,transform] duration-700 delay-200 ease-[cubic-bezier(0.22,1,0.36,1)]",
+              show ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
             )}
           >
             Planned around you, at any hour.
@@ -97,7 +207,7 @@ export function Hero() {
             className={cn(
               "mt-8 flex flex-col items-start gap-3",
               "transition-[opacity,transform] duration-700 delay-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
-              show ? "translate-y-0 opacity-100" : "translate-y-6 opacity-0",
+              show ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0",
             )}
           >
             <a
@@ -109,33 +219,9 @@ export function Hero() {
             <p className="text-[15px] text-stone">
               No prices online. Tell us the trip, we call you back.
             </p>
-            <p className="text-[13px] text-stone/80">Concept demo</p>
+            <p className="text-[12px] text-stone/80">Concept demo</p>
           </div>
         </div>
-
-        <figure
-          className={cn(
-            "relative ml-auto w-[78%] overflow-hidden md:col-span-7 md:ml-0 md:w-full",
-            "transition-[clip-path,opacity] duration-[900ms] delay-150 ease-[cubic-bezier(0.65,0,0.35,1)]",
-            show
-              ? "opacity-100 [clip-path:inset(0)]"
-              : "opacity-0 [clip-path:inset(100%_0_0_0)]",
-          )}
-        >
-          <div className="relative aspect-[4/5] w-full md:aspect-[4/5]">
-            <Image
-              src="/images/v2/delhi-humayun.jpg"
-              alt="Humayun's Tomb, Delhi — front gardens"
-              fill
-              priority
-              sizes="(max-width: 768px) 78vw, 42vw"
-              className="object-cover"
-            />
-          </div>
-          <figcaption className="mt-2 text-[14px] text-stone">
-            Humayun&apos;s Tomb, Delhi · Komal Sambhudas · CC0
-          </figcaption>
-        </figure>
       </div>
     </section>
   );

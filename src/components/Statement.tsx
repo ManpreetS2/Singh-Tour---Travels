@@ -47,7 +47,7 @@ export function Statement() {
       <div className="mx-auto max-w-3xl">
         <p
           ref={ref}
-          className="font-display text-[26px] leading-snug text-stone md:text-[40px] md:leading-snug"
+          className="font-display text-[clamp(1.5rem,3.5vw,2.75rem)] font-[350] leading-snug text-stone"
         >
           {WORDS.map((w, i) => (
             <span key={`${w}-${i}`} data-word className="transition-colors duration-300">

@@ -9,6 +9,7 @@ const anek = Anek_Devanagari({
   weight: ["300", "400", "500"],
   display: "swap",
   preload: true,
+  // Light display (300–400) for Courtyard luxury type
 });
 
 const mukta = Mukta({

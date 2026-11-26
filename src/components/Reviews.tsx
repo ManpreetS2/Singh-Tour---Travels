@@ -15,7 +15,7 @@ export function Reviews() {
         <p className="font-label">Guests&apos; words</p>
         <h2
           id="reviews-heading"
-          className="font-display mt-3 text-[30px] text-forest md:text-[48px]"
+          className="font-display mt-3 text-[clamp(1.85rem,4vw,3rem)] font-[350] text-forest"
         >
           From travellers who went with us
         </h2>

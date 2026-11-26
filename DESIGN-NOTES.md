@@ -40,7 +40,14 @@ Files: `RoutesMap.tsx`, `NorthMapSvg.tsx`, `globals.css` (`.map-sticky-frame`), 
 
 ## Palette & type
 
-Tokens in `globals.css` (`--ivory`, `--forest`, `--gold-deep`, …). Gold `#B08D57` is decoration only; text uses `--gold-deep` / `--gold-light`. Anek Devanagari + Mukta via `next/font` in `layout.tsx`. Wordmark + charbagh mark: `Wordmark.tsx`.
+Tokens in `globals.css` (`--ivory`, `--forest`, `--gold-deep`, …). Gold `#B08D57` is decoration only; text uses `--gold-deep` / `--gold-light`. Anek Devanagari + Mukta via `next/font` in `layout.tsx`. Display weight 300–400 (instanced ~350); desktop display clamps up to ~96px. Wordmark + charbagh mark: `Wordmark.tsx`.
+
+## Polish pass (post d575f5d)
+
+- **Hero:** Amber Fort golden-hour full-bleed (not Humayun’s); ivory type band; clip/scale reveal ≤900ms; mobile photo above the fold with headline.
+- **Gallery:** Desktop place hover/focus crossfades large image + offset secondary; mobile horizontal snap cards.
+- **Planner:** Placeholder “a few places you choose”; thumbnail chips; summary map artwork removed.
+- **Rhythm:** One WindowOpens interlude; gold hairline `SectionRule` between sections.
 
 ## QA carried from V1 (QW-01…16)
 
