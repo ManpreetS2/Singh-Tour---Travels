@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+:root {
+  /* Dusk Road palette */
+  --ink: #14110e;
+  --indigo: #1b222c;
+  --sandstone: #e8d9c4;
+  --paper: #f6f1ea;
+  --clay: #a34a2e;
+  --marigold: #c9893a;
+  --muted: #8a8175;
+  --line: color-mix(in srgb, var(--sandstone) 28%, transparent);
+
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  --background: var(--ink);
+  --foreground: var(--paper);
+}
+
+@theme inline {
+  --color-ink: var(--ink);
+  --color-indigo: var(--indigo);
+  --color-sandstone: var(--sandstone);
+  --color-paper: var(--paper);
+  --color-clay: var(--clay);
+  --color-marigold: var(--marigold);
+  --color-muted: var(--muted);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-display: var(--font-fraunces);
+  --font-sans: var(--font-mukta);
+  --font-hindi: var(--font-tiro);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .ken-burns,
+  .signature-rail {
+    transform: none !important;
+  }
+}
+
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-mukta), system-ui, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--clay) 55%, transparent);
+  color: var(--paper);
+}
+
+.font-display {
+  font-family: var(--font-fraunces), Georgia, serif;
+}
+
+.font-hindi {
+  font-family: var(--font-tiro), var(--font-fraunces), serif;
+}
+
+.grain::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0.07;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.illustrative-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--sandstone);
+  opacity: 0.85;
+}
+
+.btn-press {
+  transition: transform 140ms var(--ease-out), background-color 180ms var(--ease-out),
+    color 180ms var(--ease-out), border-color 180ms var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .btn-press:hover {
+    transform: translateY(-1px);
+  }
+}
+
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid var(--clay);
+  outline-offset: 3px;
+}
+
+/* Signature Ken Burns — CSS only when reduced motion off; GSAP may scrub scale */
+.ken-burns {
+  will-change: transform;
+  transform: scale(1.05);
+  animation: kenBurns 28s var(--ease-in-out) infinite alternate;
+}
+
+@keyframes kenBurns {
+  from {
+    transform: scale(1.05) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.14) translate3d(-1.5%, -1%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ken-burns {
+    animation: none;
+    transform: none;
+  }
+}
