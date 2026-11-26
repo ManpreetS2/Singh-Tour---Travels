@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560" role="img" aria-label="Map area: Tagore Garden Extension, West Delhi">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#D9CFBC" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="900" height="560" fill="#ECE4D3"/>
+  <rect width="900" height="560" fill="url(#grid)"/>
+  <path d="M0 280 H900" stroke="#C9D3C9" stroke-width="10"/>
+  <path d="M420 0 V560" stroke="#C9D3C9" stroke-width="8"/>
+  <path d="M0 160 H900" stroke="#D9CFBC" stroke-width="4"/>
+  <path d="M0 400 H900" stroke="#D9CFBC" stroke-width="4"/>
+  <path d="M220 0 V560" stroke="#D9CFBC" stroke-width="4"/>
+  <path d="M680 0 V560" stroke="#D9CFBC" stroke-width="4"/>
+  <rect x="480" y="200" width="140" height="100" fill="#2F5A44" opacity="0.35"/>
+  <text x="550" y="255" text-anchor="middle" fill="#1F3B2D" font-family="Mukta, sans-serif" font-size="12">Woodland Park</text>
+  <circle cx="450" cy="290" r="18" fill="#1F3B2D"/>
+  <circle cx="450" cy="290" r="7" fill="#F6F1E7"/>
+  <text x="450" y="340" text-anchor="middle" fill="#1E2120" font-family="Mukta, sans-serif" font-size="14">J4W4+P4 · Tagore Garden Ext.</text>
+  <text x="24" y="536" fill="#4F544F" font-family="Mukta, sans-serif" font-size="11">Map illustration · OpenStreetMap contributors · Directions via Google Maps</text>
+</svg>

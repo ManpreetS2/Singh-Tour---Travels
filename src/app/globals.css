@@ -1,40 +1,61 @@
 @import "tailwindcss";
 
 :root {
-  /* Dusk Road palette */
-  --ink: #14110e;
-  --indigo: #1b222c;
-  --sandstone: #e8d9c4;
-  --paper: #f6f1ea;
-  --clay: #a34a2e;
-  --marigold: #c9893a;
-  --muted: #8a8175;
-  --line: color-mix(in srgb, var(--sandstone) 28%, transparent);
+  /* Courtyard palette */
+  --ivory: #f6f1e7;
+  --sand: #ece4d3;
+  --forest: #1f3b2d;
+  --forest-deep: #14271e;
+  --garden: #2f5a44;
+  --charcoal: #1e2120;
+  --stone: #4f544f;
+  --gold: #b08d57;
+  --gold-deep: #7d5e2c;
+  --gold-light: #d9bc85;
+  --mist: #c9d3c9;
+  --hairline: #d9cfbc;
 
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --header-h: 56px;
+  --bar-h: 64px;
 
-  --background: var(--ink);
-  --foreground: var(--paper);
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-inout-cubic: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --background: var(--ivory);
+  --foreground: var(--charcoal);
 }
 
 @theme inline {
-  --color-ink: var(--ink);
-  --color-indigo: var(--indigo);
-  --color-sandstone: var(--sandstone);
-  --color-paper: var(--paper);
-  --color-clay: var(--clay);
-  --color-marigold: var(--marigold);
-  --color-muted: var(--muted);
+  --color-ivory: var(--ivory);
+  --color-sand: var(--sand);
+  --color-forest: var(--forest);
+  --color-forest-deep: var(--forest-deep);
+  --color-garden: var(--garden);
+  --color-charcoal: var(--charcoal);
+  --color-stone: var(--stone);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-gold-light: var(--gold-light);
+  --color-mist: var(--mist);
+  --color-hairline: var(--hairline);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-display: var(--font-fraunces);
+  --font-display: var(--font-anek);
   --font-sans: var(--font-mukta);
-  --font-hindi: var(--font-tiro);
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-h) + 16px);
+  scroll-padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (orientation: landscape) {
+  html {
+    scroll-padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -51,93 +72,247 @@ html {
     scroll-behavior: auto !important;
   }
 
-  .ken-burns,
-  .signature-rail {
+  .reveal-pending {
+    opacity: 1 !important;
     transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
   }
 }
 
 body {
-  background: var(--ink);
-  color: var(--paper);
+  background: var(--ivory);
+  color: var(--charcoal);
   font-family: var(--font-mukta), system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
+  padding-bottom: calc(var(--bar-h) + env(safe-area-inset-bottom, 0px));
+}
+
+@media (orientation: landscape) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
 }
 
 ::selection {
-  background: color-mix(in srgb, var(--clay) 55%, transparent);
-  color: var(--paper);
+  background: color-mix(in srgb, var(--forest) 28%, transparent);
+  color: var(--charcoal);
 }
 
 .font-display {
-  font-family: var(--font-fraunces), Georgia, serif;
+  font-family: var(--font-anek), var(--font-mukta), system-ui, sans-serif;
+  font-weight: 300;
+  font-variation-settings: "wdth" 112;
 }
 
-.font-hindi {
-  font-family: var(--font-tiro), var(--font-fraunces), serif;
-}
-
-.grain::before {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  opacity: 0.07;
-  mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.illustrative-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+.font-label {
+  font-family: var(--font-anek), var(--font-mukta), system-ui, sans-serif;
+  font-weight: 500;
+  font-variation-settings: "wdth" 100;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--sandstone);
-  opacity: 0.85;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: var(--gold-deep);
 }
 
+section[id] {
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+
+/* Focus rings */
+:focus-visible {
+  outline: 2px solid var(--forest);
+  outline-offset: 2px;
+}
+
+.bg-forest-deep :focus-visible,
+.bg-forest :focus-visible,
+.dark-surface :focus-visible {
+  outline-color: var(--gold-light);
+}
+
+/* Buttons */
 .btn-press {
-  transition: transform 140ms var(--ease-out), background-color 180ms var(--ease-out),
-    color 180ms var(--ease-out), border-color 180ms var(--ease-out);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .btn-press:hover {
-    transform: translateY(-1px);
-  }
+  transition:
+    transform 120ms ease-out,
+    background-color 150ms ease-out,
+    color 150ms ease-out,
+    border-color 150ms ease-out;
 }
 
 .btn-press:active {
   transform: scale(0.97);
 }
 
-.focus-ring:focus-visible {
-  outline: 2px solid var(--clay);
-  outline-offset: 3px;
+@media (hover: hover) and (pointer: fine) {
+  .btn-forest:hover {
+    background-color: var(--garden);
+  }
 }
 
-/* Signature Ken Burns — CSS only when reduced motion off; GSAP may scrub scale */
-.ken-burns {
-  will-change: transform;
-  transform: scale(1.05);
-  animation: kenBurns 28s var(--ease-in-out) infinite alternate;
+.link-underline {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  background-size: 0 1px;
+  transition: background-size 240ms var(--ease-out-quint);
 }
 
-@keyframes kenBurns {
-  from {
-    transform: scale(1.05) translate3d(0, 0, 0);
+.link-underline:hover,
+.link-underline:focus-visible {
+  background-size: 100% 1px;
+}
+
+/* Reveal helpers */
+.reveal-pending {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity 600ms var(--ease-out-quint),
+    transform 600ms var(--ease-out-quint);
+}
+
+.reveal-clip.reveal-pending {
+  clip-path: inset(8% 0 8% 0);
+  transform: scale(1.04);
+}
+
+.reveal-clip.reveal-visible {
+  clip-path: inset(0);
+  transform: scale(1);
+  transition:
+    clip-path 900ms var(--ease-inout-cubic),
+    transform 900ms var(--ease-inout-cubic),
+    opacity 900ms var(--ease-inout-cubic);
+  opacity: 1;
+}
+
+/* Route map stroke draw */
+.route-path {
+  fill: none;
+  stroke: var(--gold-light);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition:
+    stroke-dashoffset 1200ms var(--ease-inout-cubic),
+    opacity 600ms var(--ease-inout-cubic);
+}
+
+.route-path.is-dim {
+  opacity: 0.25;
+}
+
+.route-path.is-active {
+  opacity: 1;
+}
+
+.route-path.is-static {
+  opacity: 1;
+  stroke-dashoffset: 0 !important;
+}
+
+/* Sticky map — portrait only, capped height, clears header + call bar */
+.map-sticky-frame {
+  position: relative;
+}
+
+@media (orientation: portrait) and (min-height: 600px) {
+  .map-sticky-frame {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 10;
+    max-height: 45svh;
+    /* leave room above the sticky call bar */
+    max-height: min(
+      45svh,
+      calc(
+        100svh - var(--header-h) - var(--bar-h) - env(safe-area-inset-bottom, 0px) -
+          24px
+      )
+    );
   }
-  to {
-    transform: scale(1.14) translate3d(-1.5%, -1%, 0);
+}
+
+@media (orientation: landscape), (max-height: 599px) {
+  .map-sticky-frame {
+    position: relative;
+    top: auto;
+    max-height: none;
   }
+}
+
+/* Route layout switch: pin (portrait tall) vs compact (landscape / short) */
+.routes-layout-pin {
+  display: block;
+}
+.routes-layout-compact {
+  display: none;
+}
+
+@media (orientation: landscape), (max-height: 599px) {
+  .routes-layout-pin {
+    display: none;
+  }
+  .routes-layout-compact {
+    display: block;
+  }
+}
+
+/* Charbagh decorative corners */
+.charbagh-corners {
+  position: relative;
+}
+
+.charbagh-corners::before,
+.charbagh-corners::after {
+  content: "";
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: var(--gold);
+  pointer-events: none;
+}
+
+.charbagh-corners::before {
+  top: 0;
+  left: 0;
+  border-top: 1.5px solid;
+  border-left: 1.5px solid;
+}
+
+.charbagh-corners::after {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1.5px solid;
+  border-right: 1.5px solid;
+}
+
+/* Picture develops (Taste film look) — once */
+.picture-develops {
+  filter: grayscale(1) contrast(1.15);
+  transition: filter 1600ms linear;
+}
+
+.picture-develops.is-developed {
+  filter: grayscale(0) contrast(1);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .ken-burns {
-    animation: none;
-    transform: none;
+  .picture-develops {
+    filter: none;
   }
+}
+
+/* Native date input always displays locale via adjacent text */
+input[type="date"] {
+  color-scheme: light;
 }

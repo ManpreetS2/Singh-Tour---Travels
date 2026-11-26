@@ -1,27 +1,42 @@
 "use client";
 
 import { business, callUrl, whatsappUrl } from "@/lib/business";
+import { config } from "@/lib/config";
 
 export function MobileStickyBar() {
+  const wa = config.whatsappEnabled
+    ? whatsappUrl(
+        `Hello ${business.name}, I'd like to enquire about a journey from Delhi.`,
+      )
+    : null;
+
   return (
-    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-sandstone/20 bg-ink/95 p-3 backdrop-blur-md md:hidden safe-pb">
-      <div className="mx-auto grid max-w-lg grid-cols-2 gap-2">
+    <div
+      className="fixed inset-x-0 bottom-0 z-50 border-t border-forest/15 bg-ivory portrait:block landscape:hidden"
+      style={{
+        paddingBottom: "env(safe-area-inset-bottom, 0px)",
+        height: "calc(var(--bar-h) + env(safe-area-inset-bottom, 0px))",
+      }}
+      role="region"
+      aria-label="Quick actions"
+    >
+      <div className="mx-auto flex h-16 max-w-lg items-center gap-3 px-4">
         <a
           href={callUrl()}
-          className="btn-press focus-ring flex items-center justify-center rounded-sm border border-sandstone/30 py-3 text-sm font-medium text-paper"
+          className="btn-press btn-forest flex min-h-12 flex-1 items-center justify-center rounded-sm bg-forest text-[16px] font-medium text-ivory"
         >
           Call
         </a>
-        <a
-          href={whatsappUrl(
-            `Namaste! I'd like to enquire with ${business.name}.`,
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="btn-press focus-ring flex items-center justify-center rounded-sm bg-clay py-3 text-sm font-semibold text-paper"
-        >
-          WhatsApp
-        </a>
+        {wa && (
+          <a
+            href={wa}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-press flex min-h-12 flex-1 items-center justify-center rounded-sm border border-forest text-[16px] font-medium text-forest"
+          >
+            WhatsApp
+          </a>
+        )}
       </div>
     </div>
   );

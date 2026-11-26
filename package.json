@@ -8,6 +8,7 @@
     "start": "next start -p 43123",
     "lint": "eslint",
     "test:inquiry": "node scripts/test-inquiry.mjs",
+    "test:map": "node scripts/map-coverage.mjs",
     "screenshots": "node scripts/screenshots.mjs"
   },
   "dependencies": {

@@ -1,35 +1,62 @@
+import { Wordmark } from "@/components/Wordmark";
 import { business } from "@/lib/business";
+import { places } from "@/lib/destinations";
 
 export function Footer() {
+  const credits = [
+    ...places.map((p) => ({
+      place: p.name,
+      credit: p.credit,
+      license: p.license,
+      url: p.creditUrl,
+    })),
+  ];
+  // Dedupe by image url credit line
+  const seen = new Set<string>();
+  const unique = credits.filter((c) => {
+    const key = `${c.place}|${c.credit}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+
   return (
-    <footer className="border-t border-sandstone/15 bg-indigo pb-28 md:pb-10">
-      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-12 sm:px-6 lg:flex-row lg:items-start lg:justify-between lg:px-8">
-        <div>
-          <p className="font-display text-xl text-paper">{business.name}</p>
-          <p className="font-hindi mt-1 text-sm text-sandstone">
-            {business.nameHindi}
-          </p>
-          <p className="mt-4 max-w-sm text-sm leading-relaxed text-sandstone/80">
-            {business.addressShort}
-            <br />
-            {business.phoneDisplay} · {business.hours}
+    <footer className="bg-forest px-4 py-16 text-mist md:px-8 md:py-20">
+      <div className="mx-auto max-w-6xl">
+        <Wordmark inverted />
+        <p className="mt-6 max-w-md text-[15px] leading-relaxed">
+          {business.address}
+        </p>
+        <p className="mt-2 text-[15px]">{business.hours}</p>
+
+        <div className="mt-12 border-t border-garden pt-8">
+          <p className="font-label text-gold-light">Photo credits</p>
+          <ul className="mt-4 space-y-2 text-[13px] leading-relaxed">
+            {unique.map((c) => (
+              <li key={`${c.place}-${c.credit}`}>
+                {c.place} —{" "}
+                <a
+                  href={c.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="link-underline text-mist"
+                >
+                  {c.credit}
+                </a>{" "}
+                · {c.license}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-[13px]">
+            Photos show the destinations, not our vehicles or staff.
           </p>
         </div>
-        <div className="max-w-md text-sm leading-relaxed text-muted">
-          <p>
-            Demo site — illustrative content marked. Destination photos are
-            licensed stand-ins. Business name, address, phone, hours, rating,
-            and review quotes match the public Google listing.
-          </p>
-          <p className="mt-3">
-            <a
-              href="/CREDITS.md"
-              className="focus-ring rounded-sm text-sandstone underline-offset-2 hover:underline"
-            >
-              Photo credits
-            </a>
-          </p>
-        </div>
+
+        <p className="mt-10 text-[13px] text-mist/80">
+          Concept demo — built as a surprise for {business.name}. Verified facts
+          from the public Google Maps listing; example routes are illustrative
+          until confirmed.
+        </p>
       </div>
     </footer>
   );

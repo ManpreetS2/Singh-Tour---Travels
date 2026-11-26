@@ -1,155 +1,141 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { business, callUrl, whatsappUrl } from "@/lib/business";
+import { Wordmark } from "@/components/Wordmark";
+import { callUrl } from "@/lib/business";
 import { cn } from "@/lib/utils";
 
-const links = [
-  { href: "#why-us", label: "Why us" },
+const nav = [
   { href: "#destinations", label: "Destinations" },
-  { href: "#services", label: "Services" },
-  { href: "#planner", label: "Plan a trip" },
-  { href: "#reviews", label: "Reviews" },
+  { href: "#routes", label: "Routes" },
+  { href: "#plan", label: "Plan" },
   { href: "#contact", label: "Contact" },
-];
+] as const;
 
 export function Header() {
+  const [hidden, setHidden] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
-    onScroll();
+    let lastY = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      if (open) {
+        setHidden(false);
+        lastY = y;
+        return;
+      }
+      if (y > lastY && y > 80) setHidden(true);
+      else setHidden(false);
+      lastY = y;
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
   }, [open]);
 
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-200",
-        scrolled || open
-          ? "border-b border-sandstone/15 bg-ink/90 backdrop-blur-md"
-          : "border-b border-transparent bg-transparent",
+        "fixed inset-x-0 top-0 z-50 bg-ivory transition-transform duration-[240ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
+        hidden && !open && "-translate-y-full",
       )}
+      style={{ height: "var(--header-h)" }}
     >
-      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
-        <a href="#top" className="focus-ring group min-w-0 rounded-sm">
-          <span className="font-display text-[1.15rem] leading-none tracking-tight text-paper sm:text-xl">
-            {business.name}
-          </span>
-          <span className="font-hindi mt-0.5 block text-[0.7rem] leading-none text-sandstone/80 sm:text-xs">
-            {business.nameHindi}
-          </span>
+      <div
+        className={cn(
+          "mx-auto flex h-full max-w-6xl items-center justify-between px-4 md:px-8",
+          scrolled && "border-b border-hairline",
+        )}
+      >
+        <a href="#main" className="min-h-11 min-w-11 inline-flex items-center">
+          <Wordmark compact />
         </a>
 
-        <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
-          {links.map((link) => (
+        <nav className="hidden items-center gap-8 md:flex" aria-label="Primary">
+          {nav.map((item) => (
             <a
-              key={link.href}
-              href={link.href}
-              className="focus-ring rounded-sm text-sm text-sandstone/90 transition-colors duration-150 hover:text-paper"
+              key={item.href}
+              href={item.href}
+              className="link-underline font-label text-gold-deep min-h-11 inline-flex items-center"
             >
-              {link.label}
+              {item.label}
             </a>
           ))}
-        </nav>
-
-        <div className="hidden items-center gap-2 md:flex">
           <a
             href={callUrl()}
-            className="btn-press focus-ring rounded-sm border border-sandstone/30 px-3 py-2 text-sm text-paper"
+            className="btn-press btn-forest inline-flex min-h-11 items-center rounded-sm bg-forest px-5 text-[15px] font-medium text-ivory"
           >
             Call
           </a>
-          <a
-            href={whatsappUrl(
-              `Namaste! I'd like to enquire with ${business.name}.`,
-            )}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-press focus-ring rounded-sm bg-clay px-3 py-2 text-sm font-medium text-paper"
-          >
-            WhatsApp
-          </a>
-        </div>
-
-        <button
-          type="button"
-          className="btn-press focus-ring inline-flex h-10 w-10 items-center justify-center rounded-sm border border-sandstone/25 text-paper lg:hidden"
-          aria-expanded={open}
-          aria-controls="mobile-nav"
-          aria-label={open ? "Close menu" : "Open menu"}
-          onClick={() => setOpen((v) => !v)}
-        >
-          <span className="sr-only">Menu</span>
-          <span aria-hidden className="flex flex-col gap-1.5">
-            <span
-              className={cn(
-                "block h-px w-5 bg-paper transition-transform duration-200",
-                open && "translate-y-[3.5px] rotate-45",
-              )}
-            />
-            <span
-              className={cn(
-                "block h-px w-5 bg-paper transition-opacity duration-150",
-                open && "opacity-0",
-              )}
-            />
-            <span
-              className={cn(
-                "block h-px w-5 bg-paper transition-transform duration-200",
-                open && "-translate-y-[3.5px] -rotate-45",
-              )}
-            />
-          </span>
-        </button>
-      </div>
-
-      <div
-        id="mobile-nav"
-        hidden={!open}
-        className="border-t border-sandstone/15 bg-ink lg:hidden"
-      >
-        <nav className="flex flex-col gap-1 px-4 py-4" aria-label="Mobile">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="focus-ring rounded-sm px-2 py-3 text-base text-paper"
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
-          <div className="mt-2 grid grid-cols-2 gap-2">
-            <a
-              href={callUrl()}
-              className="btn-press focus-ring rounded-sm border border-sandstone/30 px-3 py-3 text-center text-sm"
-            >
-              Call
-            </a>
-            <a
-              href={whatsappUrl(
-                `Namaste! I'd like to enquire with ${business.name}.`,
-              )}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn-press focus-ring rounded-sm bg-clay px-3 py-3 text-center text-sm font-medium"
-              onClick={() => setOpen(false)}
-            >
-              WhatsApp
-            </a>
-          </div>
         </nav>
+
+        <div className="flex items-center gap-2 md:hidden">
+          <a
+            href={callUrl()}
+            className="btn-press hidden min-h-11 min-w-11 items-center justify-center rounded-sm bg-forest px-4 text-[15px] font-medium text-ivory [@media(orientation:landscape)]:inline-flex"
+          >
+            Call
+          </a>
+          <button
+            type="button"
+            className="btn-press inline-flex min-h-11 min-w-11 items-center justify-center border border-stone/40 text-forest"
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            onClick={() => setOpen((v) => !v)}
+          >
+            <span className="sr-only">{open ? "Close menu" : "Open menu"}</span>
+            <span aria-hidden className="flex flex-col gap-1.5">
+              <span
+                className={cn(
+                  "block h-px w-5 bg-forest transition-transform",
+                  open && "translate-y-[3.5px] rotate-45",
+                )}
+              />
+              <span
+                className={cn(
+                  "block h-px w-5 bg-forest transition-opacity",
+                  open && "opacity-0",
+                )}
+              />
+              <span
+                className={cn(
+                  "block h-px w-5 bg-forest transition-transform",
+                  open && "-translate-y-[3.5px] -rotate-45",
+                )}
+              />
+            </span>
+          </button>
+        </div>
       </div>
+
+      {open && (
+        <div
+          id="mobile-nav"
+          className="border-b border-hairline bg-ivory px-4 pb-6 pt-2 md:hidden"
+        >
+          <nav className="flex flex-col gap-1" aria-label="Mobile">
+            {nav.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="font-display min-h-11 inline-flex items-center text-[22px] text-forest"
+                onClick={() => setOpen(false)}
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
+        </div>
+      )}
+
+      {scrolled && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-full h-6 bg-gradient-to-b from-ivory/80 to-transparent"
+        />
+      )}
     </header>
   );
 }

@@ -1,9 +1,12 @@
+"use client";
+
+import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { TrustStrip } from "@/components/TrustStrip";
-import { WhyUs } from "@/components/WhyUs";
-import { Destinations } from "@/components/Destinations";
-import { Services } from "@/components/Services";
+import { Statement } from "@/components/Statement";
+import { Gallery } from "@/components/Gallery";
+import { WindowOpens } from "@/components/WindowOpens";
+import { RoutesMap } from "@/components/RoutesMap";
 import { TripPlanner } from "@/components/TripPlanner";
 import { Reviews } from "@/components/Reviews";
 import { Contact } from "@/components/Contact";
@@ -11,16 +14,25 @@ import { Footer } from "@/components/Footer";
 import { MobileStickyBar } from "@/components/MobileStickyBar";
 
 export default function Home() {
+  const [seedPlaces, setSeedPlaces] = useState<string[]>([]);
+
   return (
     <>
       <Header />
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         <Hero />
-        <TrustStrip />
-        <WhyUs />
-        <Destinations />
-        <Services />
-        <TripPlanner />
+        <Statement />
+        <Gallery
+          onAddPlace={(id) =>
+            setSeedPlaces((prev) => (prev.includes(id) ? prev : [...prev, id]))
+          }
+        />
+        <WindowOpens />
+        <RoutesMap />
+        <TripPlanner
+          key={seedPlaces.join("-") || "empty"}
+          seedPlaces={seedPlaces}
+        />
         <Reviews />
         <Contact />
       </main>

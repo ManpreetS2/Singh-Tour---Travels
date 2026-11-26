@@ -1,82 +1,78 @@
-import { business, callUrl, whatsappUrl } from "@/lib/business";
+import Image from "next/image";
+import { business, callUrl } from "@/lib/business";
+import { Reveal } from "@/components/Reveal";
 
 export function Contact() {
   return (
-    <section id="contact" className="bg-ink py-20 sm:py-28">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
-        <p className="text-xs font-medium uppercase tracking-[0.2em] text-clay">
-          Map & contact
-        </p>
-        <h2 className="font-display mt-3 text-3xl tracking-tight text-paper sm:text-4xl">
-          Find us in West Delhi
-        </h2>
-
-        <div className="mt-10 grid gap-10 lg:grid-cols-12">
-          <div className="flex flex-col gap-6 lg:col-span-5">
-            <address className="not-italic text-base leading-relaxed text-sandstone">
+    <section
+      id="contact"
+      className="bg-ivory px-4 py-20 md:px-8 md:py-28"
+      aria-labelledby="contact-heading"
+    >
+      <div className="mx-auto grid max-w-6xl gap-12 md:grid-cols-12 md:gap-10">
+        <div className="md:col-span-5">
+          <p className="font-label">Visit</p>
+          <h2
+            id="contact-heading"
+            className="font-display mt-3 text-[30px] text-forest md:text-[40px]"
+          >
+            From West Delhi
+          </h2>
+          <Reveal>
+            <address className="font-display mt-6 text-[22px] not-italic leading-snug text-charcoal md:text-[26px]">
               {business.address}
             </address>
-            <dl className="space-y-4 text-sm">
-              <div>
-                <dt className="text-muted">Phone</dt>
-                <dd>
-                  <a
-                    href={callUrl()}
-                    className="focus-ring rounded-sm text-lg text-paper underline-offset-4 hover:underline"
-                  >
-                    {business.phoneDisplay}
-                  </a>
-                </dd>
-              </div>
-              <div>
-                <dt className="text-muted">Hours</dt>
-                <dd className="text-paper">{business.hours}</dd>
-              </div>
-              <div>
-                <dt className="text-muted">Category</dt>
-                <dd className="text-paper">{business.category}</dd>
-              </div>
-            </dl>
+            <p className="mt-4 text-stone">{business.hours}</p>
+            <p className="mt-1 text-stone">Plus code {business.plusCode}</p>
 
-            <div className="flex flex-wrap gap-3 pt-2">
+            <div className="mt-8 flex flex-col items-start gap-3">
               <a
                 href={callUrl()}
-                className="btn-press focus-ring rounded-sm bg-clay px-5 py-3 text-sm font-semibold text-paper"
+                className="btn-press btn-forest inline-flex min-h-12 items-center rounded-sm bg-forest px-6 text-ivory"
               >
-                Call
-              </a>
-              <a
-                href={whatsappUrl(
-                  `Namaste! Contacting ${business.name} from your website.`,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-press focus-ring rounded-sm border border-sandstone/35 px-5 py-3 text-sm text-paper"
-              >
-                WhatsApp (if available)
+                Call {business.phoneDisplay}
               </a>
               <a
                 href={business.googleMapsDirections}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-press focus-ring rounded-sm border border-sandstone/35 px-5 py-3 text-sm text-paper"
+                className="link-underline inline-flex min-h-11 items-center text-forest"
               >
                 Directions
               </a>
             </div>
-          </div>
 
-          <div className="overflow-hidden rounded-sm border border-sandstone/20 lg:col-span-7">
-            <iframe
-              title={`Map showing ${business.name}`}
-              src={business.googleMapsEmbed}
-              className="h-[22rem] w-full bg-indigo sm:h-[28rem]"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              allowFullScreen
+            <dl className="mt-10 space-y-3 text-[15px]">
+              <div className="flex gap-4">
+                <dt className="font-label w-24 shrink-0">Phone</dt>
+                <dd>
+                  <a href={callUrl()} className="link-underline text-charcoal">
+                    {business.phoneDisplay}
+                  </a>
+                </dd>
+              </div>
+              <div className="flex gap-4">
+                <dt className="font-label w-24 shrink-0">Hours</dt>
+                <dd className="text-charcoal">{business.hours}</dd>
+              </div>
+            </dl>
+          </Reveal>
+        </div>
+
+        <Reveal className="md:col-span-7 md:mt-12" delayMs={80}>
+          <div className="relative ml-auto aspect-[4/3] w-[90%] overflow-hidden md:w-full">
+            <Image
+              src="/images/v2/contact-map.svg"
+              alt={`Map area near ${business.addressShort}`}
+              fill
+              sizes="(max-width: 768px) 90vw, 50vw"
+              className="object-cover bg-sand"
             />
           </div>
-        </div>
+          <p className="mt-2 text-[13px] text-stone">
+            Area map · OpenStreetMap contributors
+          </p>
+        </Reveal>
       </div>
     </section>
   );

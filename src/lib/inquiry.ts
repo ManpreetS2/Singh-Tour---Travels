@@ -8,7 +8,6 @@ export type InquiryPayload = {
   endDate: string;
   travellers: string;
   message: string;
-  /** Honeypot — must stay empty */
   company?: string;
 };
 
@@ -78,35 +77,47 @@ export function parseInquiryBody(raw: unknown): {
   if (data.travellers && !/^\d{1,2}$/.test(data.travellers)) {
     errors.travellers = "Travellers should be a number.";
   }
-  const travellersNum = Number(data.travellers || "0");
-  if (data.travellers && (travellersNum < 1 || travellersNum > 40)) {
+  const n = Number(data.travellers || "0");
+  if (data.travellers && (n < 1 || n > 40)) {
     errors.travellers = "Travellers should be between 1 and 40.";
   }
 
   return { data, errors };
 }
 
+export function formatDateEnIN(iso: string): string {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso || "?";
+  const [y, m, d] = iso.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(dt);
+}
+
+export function formatDateDdMmYyyy(iso: string): string {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso || "?";
+  const [y, m, d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+
 export function formatInquiryMessage(data: InquiryPayload): string {
+  const start = formatDateEnIN(data.startDate);
+  const end = data.endDate ? formatDateEnIN(data.endDate) : "";
+  const dates = end && end !== start ? `${start} to ${end}` : start;
   const lines = [
-    `New enquiry — ${business.name}`,
+    `Enquiry — ${business.name}`,
     `Name: ${data.name}`,
     `Phone: ${data.phone}`,
-    `Destination: ${data.destination}`,
-    `Dates: ${data.startDate || "?"} → ${data.endDate || "?"}`,
+    `From: Delhi`,
+    `To: ${data.destination}`,
+    `When: ${dates || "?"}`,
     `Travellers: ${data.travellers || "?"}`,
   ];
-  if (data.message) lines.push(`Message: ${data.message}`);
+  if (data.message) lines.push(`Note: ${data.message}`);
   return lines.join("\n");
-}
-
-export function inquiryWhatsAppUrl(data: InquiryPayload): string {
-  return `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(formatInquiryMessage(data))}`;
-}
-
-export function inquirySmsUrl(data: InquiryPayload): string {
-  const body = encodeURIComponent(formatInquiryMessage(data));
-  // iOS prefers &body after ?, Android accepts ?body=
-  return `sms:${business.phoneTel}?body=${body}`;
 }
 
 export function formatTelegramHtml(data: InquiryPayload): string {
@@ -121,9 +132,9 @@ export function formatTelegramHtml(data: InquiryPayload): string {
     `<b>Name:</b> ${esc(data.name)}`,
     `<b>Phone:</b> ${esc(data.phone)}`,
     `<b>Destination:</b> ${esc(data.destination)}`,
-    `<b>Dates:</b> ${esc(data.startDate || "?")} → ${esc(data.endDate || "?")}`,
+    `<b>Dates:</b> ${esc(formatDateEnIN(data.startDate))}${data.endDate ? ` → ${esc(formatDateEnIN(data.endDate))}` : ""}`,
     `<b>Travellers:</b> ${esc(data.travellers || "?")}`,
-    data.message ? `<b>Message:</b> ${esc(data.message)}` : "",
+    data.message ? `<b>Note:</b> ${esc(data.message)}` : "",
   ]
     .filter(Boolean)
     .join("\n");
