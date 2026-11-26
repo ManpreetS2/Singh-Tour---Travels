@@ -86,27 +86,39 @@ export function parseInquiryBody(raw: unknown): {
   return { data, errors };
 }
 
+/** en-IN display: 14 Dec 2026 from ISO yyyy-mm-dd */
+export function formatDateEnIN(iso: string): string {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso || "?";
+  const [y, m, d] = iso.split("-").map(Number);
+  const dt = new Date(Date.UTC(y, m - 1, d));
+  return new Intl.DateTimeFormat("en-IN", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(dt);
+}
+
+export function formatDateDdMmYyyy(iso: string): string {
+  if (!iso || !/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso || "?";
+  const [y, m, d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+
 export function formatInquiryMessage(data: InquiryPayload): string {
+  const start = formatDateEnIN(data.startDate);
+  const end = formatDateEnIN(data.endDate);
   const lines = [
-    `New enquiry — ${business.name}`,
+    `Enquiry — ${business.name}`,
     `Name: ${data.name}`,
     `Phone: ${data.phone}`,
-    `Destination: ${data.destination}`,
-    `Dates: ${data.startDate || "?"} → ${data.endDate || "?"}`,
+    `From: Delhi`,
+    `To: ${data.destination}`,
+    `Dates: ${start} to ${end}`,
     `Travellers: ${data.travellers || "?"}`,
   ];
   if (data.message) lines.push(`Message: ${data.message}`);
   return lines.join("\n");
-}
-
-export function inquiryWhatsAppUrl(data: InquiryPayload): string {
-  return `https://wa.me/${business.whatsapp}?text=${encodeURIComponent(formatInquiryMessage(data))}`;
-}
-
-export function inquirySmsUrl(data: InquiryPayload): string {
-  const body = encodeURIComponent(formatInquiryMessage(data));
-  // iOS prefers &body after ?, Android accepts ?body=
-  return `sms:${business.phoneTel}?body=${body}`;
 }
 
 export function formatTelegramHtml(data: InquiryPayload): string {
@@ -121,7 +133,7 @@ export function formatTelegramHtml(data: InquiryPayload): string {
     `<b>Name:</b> ${esc(data.name)}`,
     `<b>Phone:</b> ${esc(data.phone)}`,
     `<b>Destination:</b> ${esc(data.destination)}`,
-    `<b>Dates:</b> ${esc(data.startDate || "?")} → ${esc(data.endDate || "?")}`,
+    `<b>Dates:</b> ${esc(formatDateEnIN(data.startDate))} → ${esc(formatDateEnIN(data.endDate))}`,
     `<b>Travellers:</b> ${esc(data.travellers || "?")}`,
     data.message ? `<b>Message:</b> ${esc(data.message)}` : "",
   ]

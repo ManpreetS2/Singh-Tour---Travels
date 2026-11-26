@@ -1,108 +1,193 @@
-export type DestinationCategory =
-  | "Spiritual"
-  | "Mountains"
-  | "Heritage"
-  | "Weekend";
+/**
+ * Illustrative places people often travel to from Delhi.
+ * Mix rule (QW-16): alternate plains/heritage, water/ghats, hills —
+ * no two mountain frames adjacent; at most 3 of 10 mountain-dominated.
+ */
 
 export type Destination = {
   id: string;
   name: string;
-  region: string;
-  category: DestinationCategory;
-  blurb: string;
+  boardName: string;
+  state: string;
+  code: string;
+  sentence: string;
+  label: string;
   image: string;
-  itineraryHint: string;
+  credit: string;
+  creditUrl: string;
+  license: string;
+  terrain: "heritage" | "water" | "mountain" | "city";
 };
 
-export const categories: Array<DestinationCategory | "All"> = [
-  "All",
-  "Spiritual",
-  "Mountains",
-  "Heritage",
-  "Weekend",
-];
-
-/** Illustrative destinations for exploration only — not a published catalogue. */
 export const destinations: Destination[] = [
   {
     id: "amritsar",
     name: "Amritsar",
-    region: "Punjab",
-    category: "Spiritual",
-    blurb: "Golden Temple evenings and the quiet of the sarovar at dusk.",
-    image: "/images/amritsar-golden-temple.jpg",
-    itineraryHint: "Delhi → Amritsar overnight road, temple visit, return next day",
+    boardName: "AMRITSAR",
+    state: "Punjab",
+    code: "ATQ",
+    sentence:
+      "Evening light on Harmandir Sahib and the quiet of the Amrit Sarovar.",
+    label: "AMRITSAR · Punjab · Harmandir Sahib (Golden Temple)",
+    image: "/images/v2/hero-golden-temple-night.jpg",
+    credit: "Marsmux",
+    creditUrl:
+      "https://commons.wikimedia.org/wiki/File:Golden_Temple_nighttime.jpg",
+    license: "CC BY-SA 4.0",
+    terrain: "heritage",
+  },
+  {
+    id: "delhi",
+    name: "Delhi",
+    boardName: "DELHI",
+    state: "NCR",
+    code: "DEL",
+    sentence:
+      "Humayun's Tomb gardens: a calm city circuit before the open road.",
+    label: "DELHI · NCR · Humayun's Tomb",
+    image: "/images/v2/delhi-humayun.jpg",
+    credit: "Komal Sambhudas",
+    creditUrl:
+      "https://commons.wikimedia.org/wiki/File:Humayun%27s_Tomb-Delhi_front_view.jpg",
+    license: "CC0",
+    terrain: "city",
   },
   {
     id: "rishikesh",
     name: "Rishikesh",
-    region: "Uttarakhand",
-    category: "Spiritual",
-    blurb: "Ganga aarti light, riverside walks, and mountain air.",
-    image: "/images/himalaya-road.jpg",
-    itineraryHint: "Day or overnight to Rishikesh with flexible halt points",
-  },
-  {
-    id: "manali",
-    name: "Manali",
-    region: "Himachal",
-    category: "Mountains",
-    blurb: "Pine roads, snow line views, and unhurried hill stays.",
-    image: "/images/manali-mountains.jpg",
-    itineraryHint: "Multi-day Himachal road trip — pace set with you",
-  },
-  {
-    id: "ladakh",
-    name: "Ladakh",
-    region: "High Himalaya",
-    category: "Mountains",
-    blurb: "High passes, open sky, and the long road north.",
-    image: "/images/ladakh-road.jpg",
-    itineraryHint: "Long-haul mountain itinerary — confirm season and vehicle",
-  },
-  {
-    id: "shimla",
-    name: "Shimla",
-    region: "Himachal",
-    category: "Mountains",
-    blurb: "Ridge walks, colonial lanes, and cool evenings.",
-    image: "/images/shimla-hills.jpg",
-    itineraryHint: "Weekend or extended hill escape from Delhi",
+    boardName: "RISHIKESH",
+    state: "Uttarakhand",
+    code: "RKSH",
+    sentence:
+      "Lakshman Jhula over the Ganga, with the riverside town below.",
+    label: "RISHIKESH · Uttarakhand · Lakshman Jhula",
+    image: "/images/v2/rishikesh-jhula.jpg",
+    credit: "Snehrashmi",
+    creditUrl:
+      "https://commons.wikimedia.org/wiki/File:Lakshman_Jhula_Bridge_-_Hrishikesh_-_Uttarakhand_001.jpg",
+    license: "CC BY-SA 4.0",
+    terrain: "water",
   },
   {
     id: "agra",
     name: "Agra",
-    region: "Uttar Pradesh",
-    category: "Heritage",
-    blurb: "Taj at first light — the classic Delhi day journey.",
-    image: "/images/agra-taj.jpg",
-    itineraryHint: "Same-day Agra with early start and flexible return",
+    boardName: "AGRA",
+    state: "Uttar Pradesh",
+    code: "AGR",
+    sentence: "The Taj Mahal at Agra: the classic day journey from Delhi.",
+    label: "AGRA · Uttar Pradesh · Taj Mahal",
+    image: "/images/v2/agra-taj.jpg",
+    credit: "Yann; edited by King of Hearts",
+    creditUrl:
+      "https://commons.wikimedia.org/wiki/File:Taj_Mahal,_Agra,_India_edit2.jpg",
+    license: "CC BY-SA 4.0",
+    terrain: "heritage",
+  },
+  {
+    id: "shimla",
+    name: "Shimla",
+    boardName: "SHIMLA",
+    state: "Himachal",
+    code: "SLD",
+    sentence: "The Ridge and Christ Church: hill air above the plains.",
+    label: "SHIMLA · Himachal · The Ridge",
+    image: "/images/v2/shimla-ridge.jpg",
+    credit: "Tanweer Morshed",
+    creditUrl:
+      "https://commons.wikimedia.org/wiki/File:The_Ridge,_shimla_01.JPG",
+    license: "CC BY-SA 4.0",
+    terrain: "mountain",
   },
   {
     id: "jaipur",
     name: "Jaipur",
-    region: "Rajasthan",
-    category: "Heritage",
-    blurb: "Pink city streets, forts, and warm Rajasthani evenings.",
-    image: "/images/jaipur.jpg",
-    itineraryHint: "Day trip or overnight Golden Triangle leg",
+    boardName: "JAIPUR",
+    state: "Rajasthan",
+    code: "JAI",
+    sentence: "Hawa Mahal on the old city street: pink sandstone and traffic.",
+    label: "JAIPUR · Rajasthan · Hawa Mahal",
+    image: "/images/v2/jaipur-hawa.jpg",
+    credit: "Marcin Białek",
+    creditUrl: "https://commons.wikimedia.org/wiki/File:Hawa_Mahal_2011.jpg",
+    license: "CC BY-SA 4.0",
+    terrain: "heritage",
   },
   {
-    id: "delhi-heritage",
-    name: "Delhi circuits",
-    region: "NCR",
-    category: "Weekend",
-    blurb: "Airport runs, family visits, and local day circuits.",
-    image: "/images/delhi-india-gate.jpg",
-    itineraryHint: "Airport transfer or local sightseeing — ask what's available",
+    id: "haridwar",
+    name: "Haridwar",
+    boardName: "HARIDWAR",
+    state: "Uttarakhand",
+    code: "HW",
+    sentence: "Har Ki Pauri aarti: lamps on the Ganga after dusk.",
+    label: "HARIDWAR · Uttarakhand · Har Ki Pauri",
+    image: "/images/v2/haridwar-aarti.jpg",
+    credit: "Ramesh Lalwani",
+    creditUrl:
+      "https://commons.wikimedia.org/wiki/File:Aarti_at_Har_ki_Pauri_on_Explore.jpg",
+    license: "CC BY 2.0",
+    terrain: "water",
   },
   {
-    id: "open-road",
-    name: "Open highway",
-    region: "North India",
-    category: "Weekend",
-    blurb: "Golden-hour stretches between cities — your pace, our wheel.",
-    image: "/images/highway-golden.jpg",
-    itineraryHint: "Custom outstation — tell us the towns and dates",
+    id: "kashmir",
+    name: "Kashmir",
+    boardName: "KASHMIR",
+    state: "J&K",
+    code: "SXR",
+    sentence: "An empty shikara on Dal Lake, Srinagar.",
+    label: "KASHMIR · J&K · Dal Lake, Srinagar",
+    image: "/images/v2/kashmir-dal.jpg",
+    credit: "Fulvio Spada",
+    creditUrl:
+      "https://commons.wikimedia.org/wiki/File:Empty_shikara_on_Dal_Lake,_Srinagar,_India_2013-08-23_(flickr_9967093983).jpg",
+    license: "CC BY-SA 2.0",
+    terrain: "water",
+  },
+  {
+    id: "ladakh",
+    name: "Ladakh",
+    boardName: "LADAKH",
+    state: "Ladakh",
+    code: "IXL",
+    sentence: "Pangong Tso: high blue water under an open sky.",
+    label: "LADAKH · Pangong Tso",
+    image: "/images/v2/ladakh-pangong.jpg",
+    credit: "KennyOMG",
+    creditUrl: "https://commons.wikimedia.org/wiki/File:Pangong_Tso_2.jpg",
+    license: "CC BY-SA 4.0",
+    terrain: "mountain",
+  },
+  {
+    id: "vaishno-devi",
+    name: "Vaishno Devi",
+    boardName: "VAISHNO DEVI",
+    state: "J&K",
+    code: "KTRA",
+    sentence: "The temple at Katra lit for the night climb.",
+    label: "VAISHNO DEVI · Katra · Temple at night",
+    image: "/images/v2/vaishno-devi-night.jpg",
+    credit: "Baap8969",
+    creditUrl:
+      "https://commons.wikimedia.org/wiki/File:Shri_Mata_Vaishno_Devi_Temple_at_Night.jpg",
+    license: "CC0",
+    terrain: "mountain",
   },
 ];
+
+/** Board flip cycle (hero row 2). */
+export const boardPlaces = [
+  "AMRITSAR",
+  "HARIDWAR",
+  "JAIPUR",
+  "SHIMLA",
+  "AGRA",
+] as const;
+
+export function findDestination(idOrName: string) {
+  const q = idOrName.trim().toLowerCase();
+  return destinations.find(
+    (d) =>
+      d.id === q ||
+      d.name.toLowerCase() === q ||
+      d.boardName.toLowerCase() === q,
+  );
+}
