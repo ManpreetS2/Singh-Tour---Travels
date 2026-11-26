@@ -1,0 +1,248 @@
+/* Shared concept utilities — scoped by page wrappers */
+
+.concepts-a {
+  --night: #0e1424;
+  --slate: #1a2236;
+  --amber: #f2a93b;
+  --platform: #f4efe6;
+  --mist: #9aa3b5;
+  --clay: #ef7a5e;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  background: var(--night);
+  color: var(--platform);
+  font-family: var(--font-mukta), system-ui, sans-serif;
+}
+
+.concepts-a .font-board {
+  font-family: var(--font-teko), Impact, sans-serif;
+}
+
+.concepts-a .font-hindi {
+  font-family: var(--font-rajdhani), var(--font-mukta), sans-serif;
+}
+
+.concepts-a .font-mono {
+  font-family: var(--font-plex), ui-monospace, monospace;
+}
+
+.concepts-b {
+  --paper: #f3ecdf;
+  --ink: #1f1a16;
+  --saffron: #a9521a;
+  --saffron-light: #e8955a;
+  --saffron-deco: #c8641e;
+  --teal: #1f5c5a;
+  --fade: #6b6357;
+  --night: #191f2b;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-martel), Georgia, serif;
+}
+
+.concepts-b .font-display {
+  font-family: var(--font-eczar), Georgia, serif;
+}
+
+.concepts-b .font-seal {
+  font-family: var(--font-rozha), var(--font-eczar), serif;
+}
+
+.concepts-b .font-body {
+  font-family: var(--font-martel), Georgia, serif;
+}
+
+.flap-row {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.flap-tile {
+  display: inline-flex;
+  min-width: 1.15em;
+  height: 1.55em;
+  align-items: center;
+  justify-content: center;
+  background: var(--slate);
+  color: var(--amber);
+  font-family: var(--font-teko), sans-serif;
+  font-weight: 600;
+  font-size: clamp(1.4rem, 4.5vw, 2.4rem);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  position: relative;
+  border-radius: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.flap-tile::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  height: 1px;
+  background: rgba(14, 20, 36, 0.65);
+}
+
+.flap-space {
+  min-width: 0.45em;
+  background: transparent;
+  box-shadow: none;
+}
+
+.flap-space::after {
+  display: none;
+}
+
+.dest-rail {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 16px 8px;
+  scrollbar-width: thin;
+}
+
+.dest-slide {
+  flex: 0 0 86vw;
+  max-width: 420px;
+  scroll-snap-align: start;
+  position: relative;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  border-radius: 2px;
+}
+
+@media (min-width: 768px) {
+  .dest-slide {
+    flex-basis: 320px;
+  }
+}
+
+.dest-slide img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.ticket {
+  background: var(--platform);
+  color: var(--night);
+  border-radius: 4px;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .ticket {
+    grid-template-columns: 1fr 160px;
+  }
+}
+
+.ticket-stub {
+  border-top: 2px dashed #cfc5b4;
+  padding: 1.25rem;
+  background: #ebe4d6;
+  font-family: var(--font-plex), monospace;
+}
+
+@media (min-width: 768px) {
+  .ticket-stub {
+    border-top: none;
+    border-left: 2px dashed #cfc5b4;
+  }
+}
+
+.ticket-notch {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--night);
+  top: 50%;
+  left: calc(100% - 160px - 9px);
+  transform: translateY(-50%);
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .ticket-notch {
+    display: block;
+  }
+}
+
+.chapter-photo {
+  position: relative;
+  min-height: 70vh;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chapter-panel {
+  margin: 0 0 2rem 1rem;
+  max-width: 22rem;
+  background: color-mix(in srgb, var(--paper) 92%, transparent);
+  backdrop-filter: blur(8px);
+  padding: 1.25rem 1.35rem;
+  border-radius: 2px;
+}
+
+.route-line {
+  stroke: var(--saffron-deco);
+  stroke-width: 2;
+  fill: none;
+  stroke-dasharray: 4 6;
+}
+
+.btn-amber {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  background: var(--amber);
+  color: var(--night);
+  font-weight: 600;
+  border-radius: 2px;
+  transition: transform 90ms var(--ease-out);
+}
+
+.btn-amber:active {
+  transform: scale(0.97);
+}
+
+.btn-saffron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0.75rem 1.25rem;
+  background: var(--saffron);
+  color: #fff;
+  font-weight: 600;
+  border-radius: 2px;
+  transition: transform 90ms var(--ease-out);
+}
+
+.btn-saffron:active {
+  transform: scale(0.97);
+}
+
+.concept-banner {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn-amber,
+  .btn-saffron {
+    transition: none;
+  }
+}
